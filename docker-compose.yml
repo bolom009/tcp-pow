@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  server:
+    build:
+      context: ./build
+      dockerfile: ./Dockerfile.server
+    environment:
+      SERVER_HOST: "0.0.0.0"
+      SERVER_PORT: 8080
+      REDIS_HOST: "redis"
+      REDIS_PORT: 6379
+      HASHCASH_ZEROS_COUNT: 3
+      HASHCASH_DURATION: 60
+    ports:
+      - '8080:8080'
+    depends_on:
+      - redis
+  client:
+    build:
+      context: ./build
+      dockerfile: ./Dockerfile.client
+    environment:
+      SERVER_HOST: "server"
+      SERVER_PORT: 8080
+      HASHCASH_MAX_ITERATIONS: 1000000
+    depends_on:
+      - server
+  redis:
+      image: redis:7.0.2-alpine
+      ports:
+        - '6379:6379'
