@@ -10,7 +10,7 @@ services:
       SERVER_PORT: 8080
       REDIS_HOST: "redis"
       REDIS_PORT: 6379
-      HASHCASH_ZEROS_COUNT: 3
+      HASHCASH_ZERO_COUNT: 3
       HASHCASH_DURATION: 60
     ports:
       - '8080:8080'

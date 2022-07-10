@@ -184,7 +184,7 @@ func (s *Server) processRequest(ctx context.Context, msgStr string, clientInfo s
 		maxIter := hashcash.Counter
 		if maxIter <= 0 {
 			logger.Warn("ClientSentWrongParamCounter", zap.Int("counter", maxIter))
-			maxIter = 1
+			return nil, ErrInvalidHashcash
 		}
 
 		_, err = hashcash.ComputeHashcash(maxIter)
