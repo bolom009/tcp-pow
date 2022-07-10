@@ -67,17 +67,15 @@ func IsHashCorrect(hash string, zerosCount int) bool {
 
 // ComputeHashcash is a cryptographic hash-based proof-of-work algorithm
 // that requires a selectable amount of work to compute, but the proof can be verified efficiently
-func (h HashcashData) ComputeHashcash(maxIterations int) (HashcashData, error) {
+func (h *HashcashData) ComputeHashcash(maxIterations int) (HashcashData, error) {
 	for h.Counter <= maxIterations || maxIterations <= 0 {
-		header := h.Stringify()
-		hash := sha1Hash(header)
-		if IsHashCorrect(hash, h.ZerosCount) {
-			return h, nil
+		if h.Verify() {
+			return *h, nil
 		}
 
 		h.Counter++
 	}
-	return h, ErrMaxIterations
+	return *h, ErrMaxIterations
 }
 
 func (h HashcashData) Verify() bool {
