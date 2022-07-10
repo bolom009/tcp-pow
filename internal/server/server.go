@@ -187,9 +187,8 @@ func (s *Server) processRequest(ctx context.Context, msgStr string, clientInfo s
 			return nil, ErrInvalidHashcash
 		}
 
-		_, err = hashcash.ComputeHashcash(maxIter)
-		if err != nil {
-			logger.Error("FailedToComputeHashcash", zap.Int("counter", maxIter), zap.Error(err))
+		if ok := hashcash.Verify(); !ok {
+			logger.Error("FailedToComputeHashcash", zap.String("hashcash", hashcash.Stringify()), zap.Error(err))
 			return nil, ErrInvalidHashcash
 		}
 

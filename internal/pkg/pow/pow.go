@@ -79,3 +79,10 @@ func (h HashcashData) ComputeHashcash(maxIterations int) (HashcashData, error) {
 	}
 	return h, ErrMaxIterations
 }
+
+func (h HashcashData) Verify() bool {
+	header := h.Stringify()
+	hash := sha1Hash(header)
+
+	return IsHashCorrect(hash, h.ZerosCount)
+}
