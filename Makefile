@@ -1,6 +1,10 @@
 dep:
 	go mod download
 
+unit-test: dep
+	go clean --testcache
+	go test ./...
+
 build-client: dep
 	GOOS=linux go build -o build/client cmd/client/main.go
 

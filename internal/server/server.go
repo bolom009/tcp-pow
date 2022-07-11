@@ -125,15 +125,19 @@ func (s *Server) processRequest(ctx context.Context, msgStr string, clientInfo s
 		logger.Info("ClientSentRequestChallenge")
 
 		// mechanism for check timing of challenge
-		uid := uuid.NewV4()
-		id := uid.String()
+		var (
+			date = time.Now().Unix()
+			uid  = uuid.NewV4()
+			id   = uid.String()
+		)
+
 		err := s.cache.Add(ctx, id, time.Duration(s.cfg.Hashcash.Duration))
 		if err != nil {
 			logger.Error("FailedToAddToCacheDuration", zap.Error(err))
 			return nil, fmt.Errorf("failed to add rand to cache: %w", err)
 		}
 
-		hashcash := pow.NewHashcash(s.cfg.Hashcash.ZeroCount, clientInfo, id)
+		hashcash := pow.NewHashcash(s.cfg.Hashcash.ZeroCount, clientInfo, id, date)
 		b, err := json.Marshal(hashcash)
 		if err != nil {
 			logger.Error("FailedToMarshalHashcash", zap.Error(err))

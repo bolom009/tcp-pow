@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"time"
 )
 
 const (
@@ -28,11 +27,11 @@ type HashcashData struct {
 	Counter    int
 }
 
-func NewHashcash(zeroCount int, clientInfo string, uid string) *HashcashData {
+func NewHashcash(zeroCount int, clientInfo string, uid string, date int64) *HashcashData {
 	return &HashcashData{
 		Version:    DefaultVersion,
 		ZerosCount: zeroCount,
-		Date:       time.Now().Unix(),
+		Date:       date,
 		Resource:   clientInfo,
 		Rand:       base64.StdEncoding.EncodeToString([]byte(uid)),
 		Counter:    DefaultCounter,
